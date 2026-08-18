@@ -89,8 +89,39 @@ setInterval(() => {
         proj.y += proj.vy;
         proj.life--;
 
-        // 1. Boundary or expiration life checks
-        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life  {
+        // Clean up out-of-bounds or expired projectiles
+        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life <= 0) {
+            delete projectiles[pid];
+            continue; // Skip collision checking for this deleted projectile
+        }
+
+        // Hit registration check
+        for (let targetId in players) {
+            const target = players[targetId];
+            
+            // Do not hit self, and ignore dead targets
+            if (proj.ownerId === targetId || target.hp <= 0) continue;
+
+            // Basic bounding box radius hit collision check
+            const dist = Math.hypot(proj.x - target.x, proj.y - target.y);
+            if (dist < PLAYER_SIZE) {
+                target.hp -= PROJ_DAMAGE;
+
+                // Send damage alert payload to clients
+                io.emit('playerHit', { id: targetId, hp: target.hp, attackerId: proj.ownerId });
+
+                // Process death state
+                if (target.hp <= 0) {
+                    target.deaths++;
+                    
+                    const attacker = players[proj.ownerId];
+                    if (attacker) attacker.kills++;
+
+                    io.emit('playerKilled', { targetId, attackerId: proj.ownerId });
+
+                    // Respawn timer sequence logic
+                    const respawnId = targetId;
+                    setTimeout(() => {
                         if (players[respawnId]) {
                             players[respawnId].hp = 100;
                             players[respawnId].x = Math.floor(Math.random() * (ARENA_WIDTH - 100)) + 50;
@@ -101,12 +132,12 @@ setInterval(() => {
                 }
 
                 delete projectiles[pid];
-                break;
+                break; // Exit target loop since projectile dissolved
             }
         }
     }
 
-    // Synchronize projectile positions across all clients 60 times/sec
+    // Synchronize moving projectile coordinates across all clients 60 times/sec
     io.emit('projectilesUpdate', projectiles);
 }, 1000 / 60);
 

@@ -3,13 +3,11 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, { 
     cors: { 
-        origin: "*",
+        origin: "*", // Allows frontend connections from any hosting provider
         methods: ["GET", "POST"]
     } 
 });
 
-// Render serves your static frontend files automatically
-app.use(express.static(__dirname));
 const players = {};
 
 io.on('connection', (socket) => {
@@ -41,6 +39,5 @@ io.on('connection', (socket) => {
     });
 });
 
-// Render injects the PORT environment variable automatically
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => console.log(`Server running on port ${PORT}`));

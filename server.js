@@ -9,7 +9,6 @@ const players = {};
 const projectiles = {};
 let projectileIdCounter = 0;
 
-// Arena mechanics configuration
 const ARENA_WIDTH = 1600;
 const ARENA_HEIGHT = 1200;
 const PLAYER_SIZE = 20;
@@ -62,9 +61,8 @@ io.on('connection', (socket) => {
                 y: p.y,
                 vx: (dx / dist) * PROJ_SPEED,
                 vy: (dy / dist) * PROJ_SPEED,
-                life: 60 // Disappears after 60 frames (~1 sec)
+                life: 60 
             };
-            io.emit('newProjectile', projectiles[pid]);
         }
     });
 
@@ -83,58 +81,16 @@ io.on('connection', (socket) => {
     });
 });
 
-// Physics and Collision Engine Server loop (Runs at 60Hz)
+// Server Heartbeat Loop (60Hz Physics & Sync Engine)
 setInterval(() => {
-    // Process Projectiles
     for (let pid in projectiles) {
         const proj = projectiles[pid];
         proj.x += proj.vx;
         proj.y += proj.vy;
         proj.life--;
 
-        // Arena boundary check
-        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life <= 0) {
-            delete projectiles[pid];
-            io.emit('destroyProjectile', pid);
-            continue;
-        }
-
-        // Hitscan check against live targets
-        for (let targetId in players) {
-            const target = players[targetId];
-            if (targetId === proj.ownerId || target.hp <= 0) continue;
-
-            const distance = Math.hypot(target.x - proj.x, target.y - proj.y);
-            if (distance < PLAYER_SIZE + 4) {
-                target.hp -= PROJ_DAMAGE;
-                
-                // Process knockback parameters to push the hit player backward
-                const kx = proj.vx * 0.4;
-                const ky = proj.vy * 0.4;
-                target.x = Math.max(PLAYER_SIZE, Math.min(ARENA_WIDTH - PLAYER_SIZE, target.x + kx));
-                target.y = Math.max(PLAYER_SIZE, Math.min(ARENA_HEIGHT - PLAYER_SIZE, target.y + ky));
-
-                io.emit('playerHit', { 
-                    id: target.id, 
-                    hp: target.hp, 
-                    x: target.x, 
-                    y: target.y,
-                    damage: PROJ_DAMAGE,
-                    angle: Math.atan2(proj.vy, proj.vx)
-                });
-
-                if (target.hp <= 0) {
-                    target.deaths++;
-                    const killer = players[proj.ownerId];
-                    if (killer) {
-                        killer.kills++;
-                        io.emit('killNotification', { killer: killer.name, victim: target.name });
-                        io.emit('updateLeaderboard', { id: killer.id, kills: killer.kills });
-                    }
-                    io.emit('updateLeaderboard', { id: target.id, deaths: target.deaths });
-                    
-                    // Trigger delayed respawn loop
-                    setTimeout(() => {
+        // Boundary or expirations death checks
+        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life  {
                         if (players[targetId]) {
                             players[targetId].hp = 100;
                             players[targetId].x = Math.floor(Math.random() * (ARENA_WIDTH - 100)) + 50;
@@ -145,12 +101,14 @@ setInterval(() => {
                 }
 
                 delete projectiles[pid];
-                io.emit('destroyProjectile', pid);
                 break;
             }
         }
     }
+
+    // CRITICAL FIX: Synchronize all moving projectile instances to all clients 60 times a second
+    io.emit('projectilesUpdate', projectiles);
 }, 1000 / 60);
 
 const PORT = process.env.PORT || 3000;
-http.listen(PORT, () => console.log(`Arena Engine humming on port ${PORT}`));
+http.listen(PORT, () => console.log(`Arena Engine active on port ${PORT}`));

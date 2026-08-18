@@ -89,14 +89,13 @@ setInterval(() => {
         proj.y += proj.vy;
         proj.life--;
 
-        // Boundary or expirations death checks
-        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life <= 0) {
-
-                        if (players[targetId]) {
-                            players[targetId].hp = 100;
-                            players[targetId].x = Math.floor(Math.random() * (ARENA_WIDTH - 100)) + 50;
-                            players[targetId].y = Math.floor(Math.random() * (ARENA_HEIGHT - 100)) + 50;
-                            io.emit('playerRespawn', players[targetId]);
+        // 1. Boundary or expiration life checks
+        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life  {
+                        if (players[respawnId]) {
+                            players[respawnId].hp = 100;
+                            players[respawnId].x = Math.floor(Math.random() * (ARENA_WIDTH - 100)) + 50;
+                            players[respawnId].y = Math.floor(Math.random() * (ARENA_HEIGHT - 100)) + 50;
+                            io.emit('playerRespawn', players[respawnId]);
                         }
                     }, 3000);
                 }
@@ -107,7 +106,7 @@ setInterval(() => {
         }
     }
 
-    // CRITICAL FIX: Synchronize all moving projectile instances to all clients 60 times a second
+    // Synchronize projectile positions across all clients 60 times/sec
     io.emit('projectilesUpdate', projectiles);
 }, 1000 / 60);
 

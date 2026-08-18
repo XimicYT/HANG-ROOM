@@ -90,7 +90,8 @@ setInterval(() => {
         proj.life--;
 
         // Boundary or expirations death checks
-        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life  {
+        if (proj.x < 0 || proj.x > ARENA_WIDTH || proj.y < 0 || proj.y > ARENA_HEIGHT || proj.life <= 0) {
+
                         if (players[targetId]) {
                             players[targetId].hp = 100;
                             players[targetId].x = Math.floor(Math.random() * (ARENA_WIDTH - 100)) + 50;

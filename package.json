@@ -1,7 +1,7 @@
 {
-  "name": "simple-topdown-multiplayer",
-  "version": "1.0.0",
-  "description": "A fast top-down multiplayer game with chat",
+  "name": "topdown-multiplayer-arena",
+  "version": "2.0.0",
+  "description": "An optimized, high-performance top-down multiplayer arena shooter with chat.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

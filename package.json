@@ -1,13 +1,13 @@
 {
-  "name": "topdown-multiplayer-arena",
-  "version": "2.0.0",
-  "description": "An optimized, high-performance top-down multiplayer arena shooter with chat.",
-  "main": "server.js",
+  "name": "3d-hangout",
+  "version": "1.0.0",
+  "type": "commonjs",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "socket.io": "^4.7.5"
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
   }
 }

@@ -379,7 +379,7 @@ setInterval(() => {
                     let dx = p.x - g.x; let dy = p.y - g.y; let dz = p.z - g.z;
                     let dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
                     if (dist < 10) {
-                        let force = (10 - dist) * 0.15; // Reduced force multiplier for players
+                        let force = (10 - dist) * 0.95; // Reduced force multiplier for players
                         io.to(pid).emit('knockback', { vx: -(dx/dist)*force, vy: force * 0.6, vz: -(dz/dist)*force });
                     }
                 }
@@ -391,7 +391,7 @@ setInterval(() => {
                     let bdx = b.x - g.x; let bdy = b.y - g.y; let bdz = b.z - g.z;
                     let bdist = Math.sqrt(bdx*bdx + bdy*bdy + bdz*bdz);
                     if (bdist < 10) {
-                        let force = (10 - bdist) * 0.25; // Reduced force multiplier for balls
+                        let force = (10 - bdist) * 2.25; // Reduced force multiplier for balls
                         b.vx += (bdx/bdist)*force; b.vy += force * 0.8; b.vz += (bdz/bdist)*force;
                     }
                 }

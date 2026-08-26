@@ -25,17 +25,36 @@ const players = {};
 
 // Generate a few soccer balls around the center of the map
 const balls = {
-    'ball1': { x: 2, y: 0.4, z: -3, vx: 0, vy: 0, vz: 0, holderId: null },
-    'ball2': { x: -2, y: 0.4, z: 3, vx: 0, vy: 0, vz: 0, holderId: null },
-    'ball3': { x: 0, y: 0.4, z: 5, vx: 0, vy: 0, vz: 0, holderId: null }
+  'ball1': { x: 2, y: 0.4, z: -3, vx: 0, vy: 0, vz: 0, holderId: null },
+  'ball2': { x: -4, y: 0.4, z: 1, vx: 0, vy: 0, vz: 0, holderId: null },
+  'ball3': { x: 1, y: 0.4, z: 5, vx: 0, vy: 0, vz: 0, holderId: null },
+  'ball4': { x: -2, y: 0.4, z: -8, vx: 0, vy: 0, vz: 0, holderId: null },
+  'ball5': { x: 6, y: 0.4, z: 3, vx: 0, vy: 0, vz: 0, holderId: null },
+  'ball6': { x: -5, y: 0.4, z: -2, vx: 0, vy: 0, vz: 0, holderId: null },
+  'ball7': { x: 0, y: 0.4, z: 7, vx: 0, vy: 0, vz: 0, holderId: null },
+  'ball8': { x: 8, y: 0.4, z: -4, vx: 0, vy: 0, vz: 0, holderId: null }
 };
 
 const grenades = {
-    'grenade1': { x: 5, y: 0.4, z: 0, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false }
+  'grenade1': { x: 5, y: 0.4, z: 0, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false },
+  'grenade2': { x: -3, y: 0.4, z: 4, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false },
+  'grenade3': { x: 2, y: 0.4, z: -6, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false },
+  'grenade4': { x: -7, y: 0.4, z: -1, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false },
+  'grenade5': { x: 4, y: 0.4, z: 8, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false },
+  'grenade6': { x: -1, y: 0.4, z: -9, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false },
+  'grenade7': { x: 9, y: 0.4, z: 2, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false },
+  'grenade8': { x: -6, y: 0.4, z: 5, vx: 0, vy: 0, vz: 0, holderId: null, pinPulled: false, timer: 0, hidden: false }
 };
 
 const bats = {
-    'bat1': { x: 3, y: 0.4, z: -5, vx: 0, vy: 0, vz: 0, holderId: null }
+  'bat1': { x: 3, y: 0.4, z: -5, vx: 0, vy: 0, vz: 0, holderId: null },
+  'bat2': { x: -2, y: 0.4, z: 3, vx: 0, vy: 0, vz: 0, holderId: null },
+  'bat3': { x: 6, y: 0.4, z: -1, vx: 0, vy: 0, vz: 0, holderId: null },
+  'bat4': { x: -4, y: 0.4, z: -7, vx: 0, vy: 0, vz: 0, holderId: null },
+  'bat5': { x: 1, y: 0.4, z: 9, vx: 0, vy: 0, vz: 0, holderId: null },
+  'bat6': { x: -8, y: 0.4, z: 2, vx: 0, vy: 0, vz: 0, holderId: null },
+  'bat7': { x: 5, y: 0.4, z: -4, vx: 0, vy: 0, vz: 0, holderId: null },
+  'bat8': { x: -1, y: 0.4, z: -3, vx: 0, vy: 0, vz: 0, holderId: null }
 };
 
 io.on('connection', (socket) => {
